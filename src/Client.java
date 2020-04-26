@@ -1,5 +1,3 @@
-package com.pharmacy;
-
 import java.util.ArrayList;
 
 public class Client {

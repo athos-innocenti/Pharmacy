@@ -1,5 +1,3 @@
-package com.pharmacy;
-
 import java.util.Map;
 
 public class Pharmacy implements Observer{

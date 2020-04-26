@@ -1,5 +1,3 @@
-package com.pharmacy;
-
 public class Medicine {
     public String name;
     private int cost;

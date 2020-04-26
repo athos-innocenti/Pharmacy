@@ -1,5 +1,3 @@
-package com.pharmacy;
-
 public class Pharmacist {
     private String name;
     private String surname;
