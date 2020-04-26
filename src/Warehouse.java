@@ -1,12 +1,11 @@
 package com.pharmacy;
 
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class Warehouse extends Observable {
+public class Warehouse extends Subject {
     private boolean isAvailable;
     private int medicinesStored;
     private static final int MAX_CAPACITY = 100;

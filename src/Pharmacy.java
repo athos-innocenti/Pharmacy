@@ -2,7 +2,7 @@ package com.pharmacy;
 
 import java.util.Map;
 
-public class Pharmacy {
+public class Pharmacy implements Observer{
     private static String name;
     private static Pharmacist[] pharmacists;
     private static Pharmacist director;
@@ -44,5 +44,8 @@ public class Pharmacy {
             client.addRequestedMedicine(medicine);
         }
     }
+
+    @Override
+    public void update() {}
 
 }
