@@ -1,7 +1,7 @@
 public class Pharmacist {
-    private String name;
-    private String surname;
-    private boolean isDirector;
+    private final String name;
+    private final String surname;
+    private final boolean isDirector;
 
     public Pharmacist(String name, String surname, boolean isDirector) {
         this.name = name;

@@ -1,12 +1,13 @@
-import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
-public class Pharmacy implements Observer{
+public class Pharmacy implements Observer {
     private static String name;
     private static Pharmacist[] pharmacists;
     private static Pharmacist director;
 
-    private Warehouse warehouse = new Warehouse((int)(Math.random() * (Warehouse.getMaxCapacity() + 1)));
-    private Map<Client, Medicine[]> requiredMedicines;
+    private Warehouse warehouse = new Warehouse((int) (Math.random() * (Warehouse.getMaxCapacity() + 1)));
+    private HashMap<Client, ArrayList<Medicine>> requiredMedicinesPerClient = new HashMap<>();
 
     private static Pharmacy istance = null;
 
@@ -17,8 +18,9 @@ public class Pharmacy implements Observer{
     }
 
     public static Pharmacy getIstance(String name, Pharmacist[] pharmacists) {
-        if (istance == null)
+        if (istance == null) {
             istance = new Pharmacy(name, pharmacists[0], pharmacists);
+        }
         return istance;
     }
 
@@ -27,23 +29,34 @@ public class Pharmacy implements Observer{
         System.out.println("Direttore:");
         System.out.println(director.getName() + " " + director.getSurname());
         System.out.println("Dipendenti: ");
-        for (int i = 1; i < pharmacists.length; i++)
+        for (int i = 1; i < pharmacists.length; i++) {
             System.out.println(pharmacists[i].getName() + " " + pharmacists[i].getSurname());
+        }
     }
 
-    public void sellMedicine(Medicine medicine, Client client) {
+    public void sellMedicine(Medicine medicine, Client client) throws FullWarehouseException {
+        ArrayList<Medicine> medicinesRequired = new ArrayList<>();
+        requiredMedicinesPerClient.put(client, medicinesRequired);
         if (warehouse.isAvailable(medicine)) {
-            // scelta del metodo di pagamento -> PROXY
-            System.out.println("È stata venduta la medicina: " + medicine.name);
-            // update del numero di medicine nel magazzino
-            // si deve eliminare la medicina dal magazzino
-            client.removeRequestedMedicine(medicine);
+            System.out.println("Il medicinale " + medicine.getName() + " è disponibile");
+            PaymentHandler cashDesk = new ProxyPaymentHandler();
+            double cost = cashDesk.pay(medicine.getCost(), client.getIsee());
+            System.out.println("È stata venduta la medicina: " + medicine.getName() + "al prezzo di: " + cost + "\n");
+            for (int i = 0; i < requiredMedicinesPerClient.get(client).size(); i++) {
+                if (requiredMedicinesPerClient.get(client).get(i).getName().equals(medicine.getName())) {
+                    requiredMedicinesPerClient.get(client).remove(i);
+                    break;
+                }
+            }
         } else {
-            client.addRequestedMedicine(medicine);
+            System.out.println("il medicinale non è momentaneamente disponibile");
+            requiredMedicinesPerClient.get(client).add(medicine); // va fatta copia difensiva ?
+            warehouse.requireMedicine(medicine);
         }
     }
 
     @Override
-    public void update() {}
+    public void update() {
+    }
 
 }

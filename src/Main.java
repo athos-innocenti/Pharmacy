@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws NoEmployeeException {
+    public static void main(String[] args) throws NoEmployeeException, FullWarehouseException {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -12,13 +12,14 @@ public class Main {
         String surname;
 
         // CREAZIONE FARMACISTI e FARMACIA
-        System.out.println("Quanti sono i dipendenti della farmacia? ");
-        numberOfEmployees = scanner.nextInt();
-        if (numberOfEmployees == 0)
-            throw new NoEmployeeException();
-        scanner.nextLine();
         System.out.println("Nome della farmacia: ");
         pharmacyName = scanner.nextLine();
+        System.out.println("Quanti sono i dipendenti della farmacia? ");
+        numberOfEmployees = scanner.nextInt();
+        if (numberOfEmployees == 0) {
+            throw new NoEmployeeException();
+        }
+        scanner.nextLine();
 
         Pharmacist[] pharmacists = new Pharmacist[numberOfEmployees];
 
@@ -35,24 +36,34 @@ public class Main {
             surname = scanner.nextLine();
             pharmacists[i] = new Pharmacist(name, surname, false);
         }
-
-        Pharmacy.getIstance(pharmacyName, pharmacists).listOfPharmacists();
+        Pharmacy pharmacy = Pharmacy.getIstance(pharmacyName, pharmacists);
+        pharmacy.listOfPharmacists();
 
         // CREAZIONE CLIENTE
         String fiscalCode;
 
-        System.out.println("Nome del cliente: ");
+        System.out.println("\nNome del cliente: ");
         name = scanner.nextLine();
         System.out.println("Cognome del cliente: ");
         surname = scanner.nextLine();
         System.out.println("Codice fiscale del cliente: ");
         fiscalCode = scanner.nextLine();
-        System.out.println("ISEE del cliente calcolato e regisrato");
-        int isee = (int)(Math.random() * 1000000000 + 100000);
+        System.out.println("ISEE del cliente calcolato e registrato");
+        int isee = (int) (Math.random() * 1000000000 + 10000);
 
         Client client = new Client(name, surname, fiscalCode, isee);
 
-        // VENDITA MEDICINALE
+        // VENDITA MEDICINALI
+        boolean wantsToBuy;
+        Scanner scannerBuy = new Scanner(System.in);
+        do {
+            wantsToBuy = false;
+            pharmacy.sellMedicine(client.buyMedicine(), client);
+            System.out.println("Si vuole acquistare un altro medicinale? (si o no)");
+            if (scannerBuy.nextLine().equals("si")) {
+                wantsToBuy = true;
+            }
+        } while (wantsToBuy);
 
     }
 }

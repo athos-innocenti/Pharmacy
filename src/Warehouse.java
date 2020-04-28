@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class Warehouse extends Subject {
     private boolean isAvailable;
@@ -11,49 +8,29 @@ public class Warehouse extends Subject {
 
     public Warehouse(int medicinesStored) {
         this.medicinesStored = medicinesStored;
-        try {
-            Scanner scannerLen = new Scanner(new File("./data/medicinesList.txt"));
-            String name;
-            int cost, rand, indexLine, countLines = 0;
-            while (scannerLen.hasNextLine()) {
-                countLines++;
-                scannerLen.nextLine();
-            }
-            scannerLen.close();
-            for (int i = 0; i < medicinesStored; i++) {
-                rand = (int) (Math.random() * countLines + 1);
-                if (rand % 2 == 0)
-                    rand -= 1;
-                indexLine = 1;
-                Scanner scannerMed = new Scanner(new File("./data/medicinesList.txt"));
-                while (indexLine != rand) {
-                    scannerMed.nextLine();
-                    scannerMed.nextLine();
-                    indexLine += 2;
-                }
-                name = scannerMed.nextLine();
-                cost = Integer.parseInt(scannerMed.nextLine());
-                medicines.add(new Medicine(name, cost));
-                scannerMed = null;
-            }
-            System.out.println("Il magazzino contiene " + medicinesStored + " medicine");
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
+        for (int i = 0; i < medicinesStored; i++) {
+            medicines.add(new Medicine());
         }
+        System.out.println("\nIl magazzino contiene " + medicinesStored + " medicine");
     }
 
     public boolean isAvailable(Medicine medicine) {
-        for (int i = 0; i <= medicines.size(); i++) {
-            if (medicine.name.equals(medicines.get(i).name))
+        for (int i = 0; i < medicines.size(); i++) {
+            if (medicine.getName().equals(medicines.get(i).getName()) && medicine.isOriginal() == medicines.get(i).isOriginal()) {
                 isAvailable = true;
+                medicines.remove(i);
+                medicinesStored--;
+                break;
+            }
         }
         return isAvailable;
     }
 
     public void requireMedicine(Medicine medicine) throws FullWarehouseException {
         if (medicinesStored < MAX_CAPACITY) {
-            System.out.println("Il medicinale: " + medicine.name + " è stato richiesto alla casa farmaceutica");
-            // chiamata alla funzione factory, si deve aggiungere se si vuole il medicinale originale o generico
+            System.out.println("Il medicinale: " + medicine.getName() + " è stato richiesto alla casa farmaceutica");
+            // Creare medicinale mancante -> FACTORY
+            // medicinale mancante è ora disponibile -> OBSERVER
         } else
             throw new FullWarehouseException();
     }
