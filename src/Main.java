@@ -11,7 +11,6 @@ public class Main {
         String name;
         String surname;
 
-        // CREAZIONE FARMACISTI e FARMACIA
         System.out.println("Nome della farmacia: ");
         pharmacyName = scanner.nextLine();
         System.out.println("Quanti sono i dipendenti della farmacia? ");
@@ -39,7 +38,6 @@ public class Main {
         Pharmacy pharmacy = Pharmacy.getIstance(pharmacyName, pharmacists);
         pharmacy.listOfPharmacists();
 
-        // CREAZIONE CLIENTE
         String fiscalCode;
 
         System.out.println("\nNome del cliente: ");
@@ -49,11 +47,10 @@ public class Main {
         System.out.println("Codice fiscale del cliente: ");
         fiscalCode = scanner.nextLine();
         System.out.println("ISEE del cliente calcolato e registrato");
-        int isee = (int) (Math.random() * 1000000000 + 10000);
+        int isee = (int) (Math.random() * 1000000 + 10000);
 
         Client client = new Client(name, surname, fiscalCode, isee);
 
-        // VENDITA MEDICINALI
         boolean wantsToBuy;
         Scanner scannerBuy = new Scanner(System.in);
         do {

@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Warehouse extends Subject {
-    private boolean isAvailable;
     private int medicinesStored;
     private static final int MAX_CAPACITY = 100;
     private ArrayList<Medicine> medicines = new ArrayList<>();
@@ -11,10 +10,11 @@ public class Warehouse extends Subject {
         for (int i = 0; i < medicinesStored; i++) {
             medicines.add(new Medicine());
         }
-        System.out.println("\nIl magazzino contiene " + medicinesStored + " medicine");
+        System.out.println("\nIl magazzino contiene inizialmente " + medicinesStored + " medicine");
     }
 
     public boolean isAvailable(Medicine medicine) {
+        boolean isAvailable = false;
         for (int i = 0; i < medicines.size(); i++) {
             if (medicine.getName().equals(medicines.get(i).getName()) && medicine.isOriginal() == medicines.get(i).isOriginal()) {
                 isAvailable = true;
@@ -37,5 +37,9 @@ public class Warehouse extends Subject {
 
     public static int getMaxCapacity() {
         return MAX_CAPACITY;
+    }
+
+    public int getMedicinesStored() {
+        return medicinesStored;
     }
 }

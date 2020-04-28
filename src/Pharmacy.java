@@ -6,7 +6,7 @@ public class Pharmacy implements Observer {
     private static Pharmacist[] pharmacists;
     private static Pharmacist director;
 
-    private Warehouse warehouse = new Warehouse((int) (Math.random() * (Warehouse.getMaxCapacity() + 1)));
+    private Warehouse warehouse = new Warehouse((int) (Math.random() * (Warehouse.getMaxCapacity() + 1) + 1));
     private HashMap<Client, ArrayList<Medicine>> requiredMedicinesPerClient = new HashMap<>();
 
     private static Pharmacy istance = null;
@@ -25,7 +25,7 @@ public class Pharmacy implements Observer {
     }
 
     public void listOfPharmacists() {
-        System.out.println("Componenti della " + Pharmacy.name);
+        System.out.println("Componenti della Farmacia");
         System.out.println("Direttore:");
         System.out.println(director.getName() + " " + director.getSurname());
         System.out.println("Dipendenti: ");
@@ -37,20 +37,21 @@ public class Pharmacy implements Observer {
     public void sellMedicine(Medicine medicine, Client client) throws FullWarehouseException {
         ArrayList<Medicine> medicinesRequired = new ArrayList<>();
         requiredMedicinesPerClient.put(client, medicinesRequired);
+        requiredMedicinesPerClient.get(client).add(medicine); // va fatta copia difensiva ?
         if (warehouse.isAvailable(medicine)) {
-            System.out.println("Il medicinale " + medicine.getName() + " è disponibile");
+            System.out.println("Il medicinale è disponibile");
             PaymentHandler cashDesk = new ProxyPaymentHandler();
             double cost = cashDesk.pay(medicine.getCost(), client.getIsee());
-            System.out.println("È stata venduta la medicina: " + medicine.getName() + "al prezzo di: " + cost + "\n");
+            System.out.println("È stato venduto il medicinale: " + medicine.getName() + " al prezzo di: " + cost + "\n");
             for (int i = 0; i < requiredMedicinesPerClient.get(client).size(); i++) {
                 if (requiredMedicinesPerClient.get(client).get(i).getName().equals(medicine.getName())) {
                     requiredMedicinesPerClient.get(client).remove(i);
                     break;
                 }
             }
+            System.out.println("il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
         } else {
             System.out.println("il medicinale non è momentaneamente disponibile");
-            requiredMedicinesPerClient.get(client).add(medicine); // va fatta copia difensiva ?
             warehouse.requireMedicine(medicine);
         }
     }
