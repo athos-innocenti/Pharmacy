@@ -2,13 +2,12 @@ public class RealPaymentHandler extends PaymentHandler {
 
     public RealPaymentHandler() {
         super();
-        System.out.println("Pagamento con agevolazione avviato");
     }
 
     public double pay(int medicineCost, int isee) {
+        System.out.println("Pagamento con agevolazione avviato");
         int noBracket = incomeBracket(isee);
-        double cost = medicineCost + ((IVA / (double) 100) * medicineCost) + (gain * medicineCost) - ((((4 - noBracket) * 25) / (double) 100) * medicineCost);
-        return cost;
+        return medicineCost + ((IVA / (double) 100) * medicineCost) + (gain * medicineCost) - ((((4 - noBracket) * 25) / (double) 100) * medicineCost);
     }
 
     private int incomeBracket(int isee) {

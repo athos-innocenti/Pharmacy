@@ -1,9 +1,15 @@
 public abstract class PaymentHandler {
     protected static final int IVA = 22;
     protected static final double gain = 0.25;
+    protected double profit;
 
     public PaymentHandler() {
+        this.profit = 0;
     }
 
     public abstract double pay(int medicineCost, int isee);
+
+    public double getProfit() {
+        return profit;
+    }
 }

@@ -10,6 +10,7 @@ public class Pharmacy implements Observer {
     private HashMap<Client, ArrayList<Medicine>> requiredMedicinesPerClient = new HashMap<>();
 
     private static Pharmacy istance = null;
+    private PaymentHandler cashDesk;
 
     private Pharmacy(String name, Pharmacist director, Pharmacist[] pharmacists) {
         Pharmacy.name = name;
@@ -37,10 +38,12 @@ public class Pharmacy implements Observer {
     public void sellMedicine(Medicine medicine, Client client) throws FullWarehouseException {
         ArrayList<Medicine> medicinesRequired = new ArrayList<>();
         requiredMedicinesPerClient.put(client, medicinesRequired);
-        requiredMedicinesPerClient.get(client).add(medicine); // va fatta copia difensiva ?
+        requiredMedicinesPerClient.get(client).add(medicine);
         if (warehouse.isAvailable(medicine)) {
             System.out.println("Il medicinale è disponibile");
-            PaymentHandler cashDesk = new ProxyPaymentHandler();
+            if (cashDesk == null) {
+                cashDesk = new ProxyPaymentHandler();
+            }
             double cost = cashDesk.pay(medicine.getCost(), client.getIsee());
             System.out.println("È stato venduto il medicinale: " + medicine.getName() + " al prezzo di: " + cost + "\n");
             for (int i = 0; i < requiredMedicinesPerClient.get(client).size(); i++) {
@@ -49,9 +52,10 @@ public class Pharmacy implements Observer {
                     break;
                 }
             }
-            System.out.println("il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
+            System.out.println("Il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
+            System.out.println("La farmacia ha gaudagnato finora: " + cashDesk.getProfit());
         } else {
-            System.out.println("il medicinale non è momentaneamente disponibile");
+            System.out.println("Il medicinale non è momentaneamente disponibile");
             warehouse.requireMedicine(medicine);
         }
     }
@@ -59,5 +63,4 @@ public class Pharmacy implements Observer {
     @Override
     public void update() {
     }
-
 }

@@ -10,14 +10,18 @@ public class ProxyPaymentHandler extends PaymentHandler {
     }
 
     public double pay(int medicineCost, int isee) {
-        double cost = 0;
+        double cost;
         System.out.println("Si desidera acquistare a prezzo pieno o ridotto? (pieno o ridotto)");
         if (scanner.nextLine().equals("pieno")) {
             System.out.println("Pagamento pieno avviato");
             cost = medicineCost + ((IVA / (double) 100) * medicineCost) + (gain * medicineCost);
+            profit += cost;
         } else {
-            realPaymentHandler = new RealPaymentHandler();
+            if (realPaymentHandler == null) {
+                realPaymentHandler = new RealPaymentHandler();
+            }
             cost = realPaymentHandler.pay(medicineCost, isee);
+            profit += cost;
         }
         return cost;
     }
