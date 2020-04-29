@@ -1,5 +1,6 @@
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Observer;
+import java.util.Observable;
 
 public class Pharmacy implements Observer {
     private static String name;
@@ -7,7 +8,7 @@ public class Pharmacy implements Observer {
     private static Pharmacist director;
 
     private Warehouse warehouse = new Warehouse((int) (Math.random() * (Warehouse.getMaxCapacity() + 1) + 1));
-    private HashMap<Client, ArrayList<Medicine>> requiredMedicinesPerClient = new HashMap<>();
+    private ArrayList<Reservation> clientsReservations = new ArrayList<>();
 
     private static Pharmacy istance = null;
     private PaymentHandler cashDesk;
@@ -16,6 +17,7 @@ public class Pharmacy implements Observer {
         Pharmacy.name = name;
         Pharmacy.director = director;
         Pharmacy.pharmacists = pharmacists;
+        warehouse.addObserver(this);
     }
 
     public static Pharmacy getIstance(String name, Pharmacist[] pharmacists) {
@@ -35,32 +37,47 @@ public class Pharmacy implements Observer {
         }
     }
 
-    public void sellMedicine(Medicine medicine, Client client) throws FullWarehouseException {
-        ArrayList<Medicine> medicinesRequired = new ArrayList<>();
-        requiredMedicinesPerClient.put(client, medicinesRequired);
-        requiredMedicinesPerClient.get(client).add(medicine);
-        if (warehouse.isAvailable(medicine)) {
-            System.out.println("Il medicinale è disponibile");
+    public void sellMedicine(String desiredMedicineName, boolean isDesiredMedicineOriginal, Client client) throws FullWarehouseException {
+        clientsReservations.add(new Reservation(new Client(client), desiredMedicineName, isDesiredMedicineOriginal));
+        if (warehouse.isAvailable(desiredMedicineName, isDesiredMedicineOriginal)) {
+            System.out.println("La medicina richiesta è disponibile nel magazzino");
             if (cashDesk == null) {
                 cashDesk = new ProxyPaymentHandler();
             }
-            double cost = cashDesk.pay(medicine.getCost(), client.getIsee());
-            System.out.println("È stato venduto il medicinale: " + medicine.getName() + " al prezzo di: " + cost + "\n");
-            for (int i = 0; i < requiredMedicinesPerClient.get(client).size(); i++) {
-                if (requiredMedicinesPerClient.get(client).get(i).getName().equals(medicine.getName())) {
-                    requiredMedicinesPerClient.get(client).remove(i);
+            double cost = cashDesk.pay(warehouse.getSoldMedicine().getCost(), client.getIsee());
+            System.out.println("È stata venduta la madicina: " + warehouse.getSoldMedicine().getName() + " al prezzo di: " + cost + "\n");
+            for (int i = 0; i < clientsReservations.size(); i++) {
+                if (clientsReservations.get(i).getClientIdentifier().getFiscalCode().equals(client.getFiscalCode())
+                        && clientsReservations.get(i).getDesiredMedicineName().equals(warehouse.getSoldMedicine().getName())
+                        && clientsReservations.get(i).isDesiredMedicineOriginal() == warehouse.getSoldMedicine().isOriginal()) {
+                    clientsReservations.remove(i);
                     break;
                 }
             }
             System.out.println("Il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
             System.out.println("La farmacia ha gaudagnato finora: " + cashDesk.getProfit());
         } else {
-            System.out.println("Il medicinale non è momentaneamente disponibile");
-            warehouse.requireMedicine(medicine);
+            System.out.println("La medicina richiesta non è momentaneamente disponibile");
+            warehouse.requireMedicine(desiredMedicineName, isDesiredMedicineOriginal);
         }
     }
 
     @Override
-    public void update() {
+    public void update(Observable o, Object arg) {
+        try {
+            String clientName;
+            Thread.sleep(2000);
+            System.out.println("La medicina richiesta è ora disponibile");
+            for (int i = 0; i < clientsReservations.size(); i++) {
+                if (clientsReservations.get(i).getDesiredMedicineName().equals(warehouse.getRequiredMedicine().getName())
+                        && clientsReservations.get(i).isDesiredMedicineOriginal() == warehouse.getRequiredMedicine().isOriginal()) {
+                    clientName = clientsReservations.get(i).getClientIdentifier().getName();
+                    System.out.println("È stato avvisato il cliente " + clientName + " che la medicina " + clientsReservations.get(i).getDesiredMedicineName() + " è ora disponibile");
+                    break;
+                }
+            }
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class Warehouse extends Subject {
+public class Warehouse extends Observable {
     private int medicinesStored;
     private static final int MAX_CAPACITY = 100;
     private ArrayList<Medicine> medicines = new ArrayList<>();
+    private Medicine soldMedicine, requiredMedicine;
 
     public Warehouse(int medicinesStored) {
         this.medicinesStored = medicinesStored;
@@ -13,11 +15,12 @@ public class Warehouse extends Subject {
         System.out.println("\nIl magazzino contiene inizialmente " + medicinesStored + " medicine");
     }
 
-    public boolean isAvailable(Medicine medicine) {
+    public boolean isAvailable(String medicineName, boolean isMedicineOriginal) {
         boolean isAvailable = false;
         for (int i = 0; i < medicines.size(); i++) {
-            if (medicine.getName().equals(medicines.get(i).getName()) && medicine.isOriginal() == medicines.get(i).isOriginal()) {
+            if (medicineName.equals(medicines.get(i).getName()) && isMedicineOriginal == medicines.get(i).isOriginal()) {
                 isAvailable = true;
+                soldMedicine = new Medicine(medicines.get(i));
                 medicines.remove(i);
                 medicinesStored--;
                 break;
@@ -26,13 +29,25 @@ public class Warehouse extends Subject {
         return isAvailable;
     }
 
-    public void requireMedicine(Medicine medicine) throws FullWarehouseException {
+    public void requireMedicine(String medicineName, boolean isOriginal) throws FullWarehouseException {
         if (medicinesStored < MAX_CAPACITY) {
-            System.out.println("Il medicinale: " + medicine.getName() + " è stato richiesto alla casa farmaceutica");
-            // Creare medicinale mancante -> FACTORY
-            // medicinale mancante è ora disponibile -> OBSERVER
-        } else
+            System.out.println("La medicina: " + medicineName + " è stato richiesto alla casa farmaceutica");
+            requiredMedicine = new Medicine(medicineName, isOriginal);
+            medicines.add(new Medicine(requiredMedicine));
+            medicinesStored++;
+            setChanged();
+            notifyObservers();
+        } else {
             throw new FullWarehouseException();
+        }
+    }
+
+    public Medicine getSoldMedicine() {
+        return soldMedicine;
+    }
+
+    public Medicine getRequiredMedicine() {
+        return requiredMedicine;
     }
 
     public static int getMaxCapacity() {

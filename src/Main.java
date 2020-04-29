@@ -55,8 +55,8 @@ public class Main {
         Scanner scannerBuy = new Scanner(System.in);
         do {
             wantsToBuy = false;
-            pharmacy.sellMedicine(client.buyMedicine(), client);
-            System.out.println("Si vuole acquistare un altro medicinale? (si o no)");
+            pharmacy.sellMedicine(client.selectDesiredMedicineName(), client.selectIsDesiredMedicineOriginal(), client);
+            System.out.println("Si vuole acquistare un'altra medicina? (si o no)");
             if (scannerBuy.nextLine().equals("si")) {
                 wantsToBuy = true;
             }

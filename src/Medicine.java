@@ -14,7 +14,19 @@ public class Medicine {
         this.isOriginal = setIsOriginal();
     }
 
-    private int setRand() {
+    public Medicine(String name, boolean isOriginal) {
+        this.name = name;
+        this.cost = setMedicineCost(name);
+        this.isOriginal = isOriginal;
+    }
+
+    public Medicine(Medicine med) {
+        this.name = med.getName();
+        this.cost = med.getCost();
+        this.isOriginal = med.isOriginal();
+    }
+
+    public static int setRand() {
         int rand = 0;
         try {
             Scanner scanner = new Scanner(new File("./data/medicinesList.txt"));
@@ -34,7 +46,7 @@ public class Medicine {
         return rand;
     }
 
-    private String setMedicineName(int random) {
+    public static String setMedicineName(int random) {
         String name = "";
         int indexLine = 1;
         try {
@@ -68,8 +80,25 @@ public class Medicine {
         return cost;
     }
 
-    private boolean setIsOriginal() {
-        if((int)(Math.random()) == 1) {
+    private int setMedicineCost(String medicineName) {
+        int cost = 0;
+        try {
+            Scanner scanner = new Scanner(new File("./data/medicinesList.txt"));
+            while (scanner.hasNextLine()) {
+                if (scanner.nextLine().equals(medicineName)) {
+                    cost = Integer.parseInt(scanner.nextLine());
+                }
+                scanner.nextLine();
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
+        return cost;
+    }
+
+    public static boolean setIsOriginal() {
+        if ((int) (Math.random()) == 1) {
             return true;
         } else {
             return false;

@@ -11,13 +11,36 @@ public class Client {
         this.isee = isee;
     }
 
-    public Medicine buyMedicine() {
-        Medicine medicine = new Medicine();
-        System.out.println("\nIl cliente vuole acquistare il medicinale: " + medicine.getName());
-        return medicine;
+    public Client(Client c) {
+        this.name = c.getName();
+        this.surname = c.getSurname();
+        this.fiscalCode = c.getFiscalCode();
+        this.isee = c.getIsee();
+    }
+
+    public String selectDesiredMedicineName() {
+        String nameDesriedMedicine = Medicine.setMedicineName(Medicine.setRand());
+        System.out.println("\nIl cliente vuole acquistare la medicina: " + nameDesriedMedicine);
+        return nameDesriedMedicine;
+    }
+
+    public boolean selectIsDesiredMedicineOriginal() {
+        return Medicine.setIsOriginal();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
     }
 
     public int getIsee() {
         return isee;
+    }
+
+    public String getFiscalCode() {
+        return fiscalCode;
     }
 }
