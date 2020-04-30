@@ -16,4 +16,8 @@ public class Pharmacist {
     public String getSurname() {
         return surname;
     }
+
+    public boolean isDirector() {
+        return isDirector;
+    }
 }
