@@ -32,7 +32,7 @@ public class Client {
         return name;
     }
 
-    private String getSurname() {
+    public String getSurname() {
         return surname;
     }
 

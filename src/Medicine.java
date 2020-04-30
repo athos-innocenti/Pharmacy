@@ -29,7 +29,7 @@ public class Medicine {
     public static int setRand() {
         int rand = 0;
         try {
-            Scanner scanner = new Scanner(new File("./data/medicinesList.txt"));
+            Scanner scanner = new Scanner(new File("src/data/medicinesList.txt"));
             int countLines = 0;
             while (scanner.hasNextLine()) {
                 countLines++;
@@ -50,7 +50,7 @@ public class Medicine {
         String name = "";
         int indexLine = 1;
         try {
-            Scanner scannerName = new Scanner(new File("./data/medicinesList.txt"));
+            Scanner scannerName = new Scanner(new File("src/data/medicinesList.txt"));
             while (indexLine != random) {
                 scannerName.nextLine();
                 indexLine += 1;
@@ -67,7 +67,7 @@ public class Medicine {
         int indexLine = 1;
         int cost = 0;
         try {
-            Scanner scannerCost = new Scanner(new File("./data/medicinesList.txt"));
+            Scanner scannerCost = new Scanner(new File("src/data/medicinesList.txt"));
             while (indexLine != random) {
                 scannerCost.nextLine();
                 indexLine += 1;
@@ -83,7 +83,7 @@ public class Medicine {
     private int setMedicineCost(String medicineName) {
         int cost = 0;
         try {
-            Scanner scanner = new Scanner(new File("./data/medicinesList.txt"));
+            Scanner scanner = new Scanner(new File("src/data/medicinesList.txt"));
             while (scanner.hasNextLine()) {
                 if (scanner.nextLine().equals(medicineName)) {
                     cost = Integer.parseInt(scanner.nextLine());
