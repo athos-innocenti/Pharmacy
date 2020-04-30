@@ -31,7 +31,7 @@ public class Warehouse extends Observable {
 
     public void requireMedicine(String medicineName, boolean isOriginal) throws FullWarehouseException {
         if (medicinesStored < MAX_CAPACITY) {
-            System.out.println("La medicina: " + medicineName + " è stato richiesto alla casa farmaceutica");
+            System.out.println("La medicina: " + medicineName + " è stata richiesta alla casa farmaceutica");
             requiredMedicine = new Medicine(medicineName, isOriginal);
             medicines.add(new Medicine(requiredMedicine));
             medicinesStored++;

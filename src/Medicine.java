@@ -87,6 +87,7 @@ public class Medicine {
             while (scanner.hasNextLine()) {
                 if (scanner.nextLine().equals(medicineName)) {
                     cost = Integer.parseInt(scanner.nextLine());
+                    break;
                 }
                 scanner.nextLine();
             }

@@ -7,11 +7,11 @@ public class Pharmacy implements Observer {
     private static Pharmacist[] pharmacists;
     private static Pharmacist director;
 
-    private Warehouse warehouse = new Warehouse((int) (Math.random() * (Warehouse.getMaxCapacity() + 1) + 1));
-    private ArrayList<Reservation> clientsReservations = new ArrayList<>();
-
     private static Pharmacy istance = null;
+
+    private final Warehouse warehouse = new Warehouse((int) (Math.random() * (Warehouse.getMaxCapacity() + 1) + 1));
     private PaymentHandler cashDesk;
+    private final ArrayList<Reservation> clientsReservations = new ArrayList<>();
 
     private Pharmacy(String name, Pharmacist director, Pharmacist[] pharmacists) {
         Pharmacy.name = name;
@@ -45,7 +45,7 @@ public class Pharmacy implements Observer {
                 cashDesk = new ProxyPaymentHandler();
             }
             double cost = cashDesk.pay(warehouse.getSoldMedicine().getCost(), client.getIsee());
-            System.out.println("È stata venduta la madicina: " + warehouse.getSoldMedicine().getName() + " al prezzo di: " + cost + "\n");
+            System.out.println("È stata venduta la medicina: " + warehouse.getSoldMedicine().getName() + " al prezzo di: " + cost + "\n");
             for (int i = 0; i < clientsReservations.size(); i++) {
                 if (clientsReservations.get(i).getClientIdentifier().getFiscalCode().equals(client.getFiscalCode())
                         && clientsReservations.get(i).getDesiredMedicineName().equals(warehouse.getSoldMedicine().getName())
@@ -67,7 +67,7 @@ public class Pharmacy implements Observer {
         try {
             String clientName;
             Thread.sleep(2000);
-            System.out.println("La medicina richiesta è ora disponibile");
+            System.out.println("\nLa medicina richiesta è ora disponibile");
             for (int i = 0; i < clientsReservations.size(); i++) {
                 if (clientsReservations.get(i).getDesiredMedicineName().equals(warehouse.getRequiredMedicine().getName())
                         && clientsReservations.get(i).isDesiredMedicineOriginal() == warehouse.getRequiredMedicine().isOriginal()) {

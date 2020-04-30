@@ -56,7 +56,7 @@ public class Main {
         do {
             wantsToBuy = false;
             pharmacy.sellMedicine(client.selectDesiredMedicineName(), client.selectIsDesiredMedicineOriginal(), client);
-            System.out.println("Si vuole acquistare un'altra medicina? (si o no)");
+            System.out.println("\nSi vuole acquistare un'altra medicina? (si o no)");
             if (scannerBuy.nextLine().equals("si")) {
                 wantsToBuy = true;
             }
