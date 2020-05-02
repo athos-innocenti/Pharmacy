@@ -1,26 +1,22 @@
-import java.util.Scanner;
-
 public class ProxyPaymentHandler extends PaymentHandler {
     private RealPaymentHandler realPaymentHandler;
-    private Scanner scanner = new Scanner(System.in);
 
     public ProxyPaymentHandler() {
         super();
         System.out.println("\nAvvio pagamento...");
     }
 
-    public double pay(int medicineCost, int isee) {
+    public double pay(int medicineCost, int isee, String paymentMethod) {
         double cost;
-        System.out.println("Si desidera acquistare a prezzo pieno o ridotto? (pieno o ridotto)");
-        if (scanner.nextLine().equals("pieno")) {
-            System.out.println("Pagamento pieno avviato");
+        if (paymentMethod.equals("pieno")) {
+            System.out.println("Pagamento " + paymentMethod + " avviato");
             cost = medicineCost + ((IVA / (double) 100) * medicineCost) + (gain * medicineCost);
             profit += cost;
         } else {
             if (realPaymentHandler == null) {
                 realPaymentHandler = new RealPaymentHandler();
             }
-            cost = realPaymentHandler.pay(medicineCost, isee);
+            cost = realPaymentHandler.pay(medicineCost, isee, paymentMethod);
             profit += cost;
         }
         return cost;

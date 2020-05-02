@@ -7,9 +7,10 @@ public abstract class PaymentHandler {
         this.profit = 0;
     }
 
-    public abstract double pay(int medicineCost, int isee);
+    public abstract double pay(int medicineCost, int isee, String paymentMethod);
 
     public double getProfit() {
         return profit;
     }
+
 }
