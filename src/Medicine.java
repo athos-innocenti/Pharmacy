@@ -6,24 +6,28 @@ public class Medicine {
     private final String name;
     private final int cost;
     private final boolean isOriginal;
+    private final boolean isReserved;
 
     public Medicine() {
         int rand = setRand();
         this.name = setMedicineName(rand);
         this.cost = setMedicineCost(rand + 1);
         this.isOriginal = setIsOriginal();
+        this.isReserved = false;
     }
 
-    public Medicine(String name, boolean isOriginal) {
+    public Medicine(String name, boolean isOriginal, boolean isReserved) {
         this.name = name;
         this.cost = setMedicineCost(name);
         this.isOriginal = isOriginal;
+        this.isReserved = isReserved;
     }
 
     public Medicine(Medicine med) {
         this.name = med.getName();
         this.cost = med.getCost();
         this.isOriginal = med.isOriginal();
+        this.isReserved = med.isReserved();
     }
 
     public static int setRand() {
@@ -99,11 +103,7 @@ public class Medicine {
     }
 
     public static boolean setIsOriginal() {
-        if ((int) (Math.random()) == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Math.random() < 0.5);
     }
 
     public String getName() {
@@ -116,5 +116,9 @@ public class Medicine {
 
     public boolean isOriginal() {
         return isOriginal;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
     }
 }

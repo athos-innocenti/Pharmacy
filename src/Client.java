@@ -20,7 +20,7 @@ public class Client {
 
     public String selectDesiredMedicineName() {
         String nameDesriedMedicine = Medicine.setMedicineName(Medicine.setRand());
-        System.out.println("\nIl cliente vuole acquistare la medicina: " + nameDesriedMedicine);
+        System.out.println("\n" + getName() + " vuole acquistare la medicina: " + nameDesriedMedicine);
         return nameDesriedMedicine;
     }
 
