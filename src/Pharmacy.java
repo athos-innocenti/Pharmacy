@@ -106,17 +106,18 @@ public class Pharmacy implements Observer {
             }
             if (totalClients > 1 && clientsReservations.size() > 0 && Math.random() < 0.5) {
                 for (Reservation r : clientsReservations) {
-                    if (!r.getClientIdentifier().getName().equals(client.getName())) {
+                    if (!r.getClientIdentifier().getFiscalCode().equals(client.getFiscalCode())) {
                         warehouse.createRequiredMedicine(clientsReservations.size() - 1, totalClients - 1);
                         break;
                     }
                 }
             }
-            previousClient = client.getFiscalCode();
             System.out.println("\nSi vuole acquistare un'altra medicina? (si o no)");
             wantsToBuy = scanner.nextLine().equals("si");
+            previousClient = client.getFiscalCode();
         }
         while (wantsToBuy);
+        //previousClient = client.getFiscalCode();
         receipt.getPurchasedMedicines(client.getName());
         System.out.println("Spende in totale: " + receipt.getTotalCost());
     }
