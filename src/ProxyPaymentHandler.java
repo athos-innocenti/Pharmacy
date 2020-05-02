@@ -1,7 +1,7 @@
 public class ProxyPaymentHandler extends PaymentHandler {
     private RealPaymentHandler realPaymentHandler;
 
-    public ProxyPaymentHandler() {
+    ProxyPaymentHandler() {
         super();
         System.out.println("\nAvvio pagamento...");
     }

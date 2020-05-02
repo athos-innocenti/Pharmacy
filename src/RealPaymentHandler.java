@@ -2,7 +2,7 @@ import java.math.BigDecimal;
 
 public class RealPaymentHandler extends PaymentHandler {
 
-    public RealPaymentHandler() {
+    RealPaymentHandler() {
         super();
     }
 
