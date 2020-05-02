@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 import java.util.Observable;
 
-public class Warehouse extends Observable {
+class Warehouse extends Observable {
     private int medicinesStored, medicineRecived;
-    private static final int MAX_CAPACITY = 1000;
+    private static final int MAX_CAPACITY = 100;
     private ArrayList<Medicine> medicines = new ArrayList<>();
     private Medicine soldMedicine;
     private ArrayList<Ordination> requiredMedicines = new ArrayList<>();
 
-    public Warehouse(int medicinesStored) {
+    Warehouse(int medicinesStored) {
         this.medicinesStored = medicinesStored;
         for (int i = 0; i < medicinesStored; i++) {
             medicines.add(new Medicine());
@@ -16,7 +16,7 @@ public class Warehouse extends Observable {
         System.out.println("\nIl magazzino contiene inizialmente " + medicinesStored + " medicine");
     }
 
-    public boolean isAvailable(String medicineName, boolean isMedicineOriginal) {
+    boolean isAvailable(String medicineName, boolean isMedicineOriginal) {
         boolean isAvailable = false;
         for (int i = 0; i < medicines.size(); i++) {
             if (medicineName.equals(medicines.get(i).getName()) && isMedicineOriginal == medicines.get(i).isOriginal() && !medicines.get(i).isReserved()) {
@@ -30,7 +30,7 @@ public class Warehouse extends Observable {
         return isAvailable;
     }
 
-    public void addRequiredMedicine(String medicineName, boolean isOriginal, int clientId) {
+    void addRequiredMedicine(String medicineName, boolean isOriginal, int clientId) {
         System.out.println("La medicina: " + medicineName + " è stata richiesta alla casa farmaceutica");
         requiredMedicines.add(new Ordination(medicineName, isOriginal, clientId));
     }
@@ -56,7 +56,7 @@ public class Warehouse extends Observable {
         notifyObservers();
     }*/
 
-    public void createRequiredMedicine(int noRequiredMedicines, int currentClientId) throws FullWarehouseException {
+    void createRequiredMedicine(int noRequiredMedicines, int currentClientId) throws FullWarehouseException {
         if (medicinesStored < MAX_CAPACITY) {
             int randMed = (int) (Math.random() * noRequiredMedicines);
             if (requiredMedicines.get(randMed).getClientId() != currentClientId) {
@@ -73,19 +73,19 @@ public class Warehouse extends Observable {
         notifyObservers();
     }
 
-    public int getMedicineRecived() {
+    int getMedicineRecived() {
         return medicineRecived;
     }
 
-    public Medicine getSoldMedicine() {
+    Medicine getSoldMedicine() {
         return soldMedicine;
     }
 
-    public static int getMaxCapacity() {
+    static int getMaxCapacity() {
         return MAX_CAPACITY;
     }
 
-    public int getMedicinesStored() {
+    int getMedicinesStored() {
         return medicinesStored;
     }
 }

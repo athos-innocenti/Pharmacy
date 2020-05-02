@@ -11,10 +11,11 @@ public class Pharmacy implements Observer {
     private Warehouse warehouse;
     private ArrayList<Reservation> clientsReservations;
 
-    private static Scanner scanner = new Scanner(System.in);
     private String previousClient;
-    private PaymentHandler receipt;
+    private PaymentHandler payment;
+    private Receipt receipt;
 
+    private static Scanner scanner = new Scanner(System.in);
     private static Pharmacy istance = null;
 
     private Pharmacy(String name, Pharmacist director, Pharmacist[] pharmacists) {
@@ -31,7 +32,7 @@ public class Pharmacy implements Observer {
         warehouse.addObserver(this);
     }
 
-    public static Pharmacy getIstance() throws NoEmployeeException {
+    static Pharmacy getIstance() throws NoEmployeeException {
         if (istance == null) {
             System.out.println("Nome della farmacia: ");
             String pharmacyName = scanner.nextLine();
@@ -66,7 +67,7 @@ public class Pharmacy implements Observer {
         return istance;
     }
 
-    public void listOfPharmacists() {
+    void listOfPharmacists() {
         System.out.println("\nComponenti della farmacia: " + name);
         System.out.println("Direttore:");
         System.out.println(director.getName() + " " + director.getSurname());
@@ -76,7 +77,7 @@ public class Pharmacy implements Observer {
         }
     }
 
-    public void sellMedicine(Client client) throws FullWarehouseException {
+    void sellMedicine(Client client) throws FullWarehouseException {
         totalClients++;
         String desiredMedicineName;
         boolean isDesiredMedicineOriginal, wantsToBuy;
@@ -88,13 +89,15 @@ public class Pharmacy implements Observer {
                 System.out.println("Si desidera acquistare a prezzo pieno o ridotto? (pieno o ridotto)");
                 String paymentMethod = scanner.nextLine();
                 if (!client.getFiscalCode().equals(previousClient)) {
-                    receipt = new ProxyPaymentHandler();
+                    payment = new ProxyPaymentHandler();
+                    receipt = new Receipt();
                 }
-                double cost = receipt.pay(warehouse.getSoldMedicine().getCost(), client.getIsee(), paymentMethod);
+                double cost = payment.pay(warehouse.getSoldMedicine().getCost(), client.getIsee(), paymentMethod);
+                receipt.addPurchasedMedicine(desiredMedicineName, isDesiredMedicineOriginal, cost);
                 totalGain += cost;
-                System.out.println("\nÈ stata venduta la medicina: " + warehouse.getSoldMedicine().getName() + " al prezzo di: " + cost + "\n");
+                System.out.println("\nÈ stata venduta la medicina: " + warehouse.getSoldMedicine().getName() + " al prezzo di: " + cost);
+                System.out.println(client.getName() + " ha speso finora: " + payment.getProfit() + "\n");
                 System.out.println("Il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
-                System.out.println(client.getName() + " ha speso finora: " + receipt.getProfit());
             } else {
                 System.out.println("La medicina richiesta non è momentaneamente disponibile");
                 clientsReservations.add(new Reservation(new Client(client), desiredMedicineName, isDesiredMedicineOriginal));
@@ -109,11 +112,13 @@ public class Pharmacy implements Observer {
                     }
                 }
             }
+            previousClient = client.getFiscalCode();
             System.out.println("\nSi vuole acquistare un'altra medicina? (si o no)");
             wantsToBuy = scanner.nextLine().equals("si");
         }
         while (wantsToBuy);
-        previousClient = client.getFiscalCode();
+        receipt.getPurchasedMedicines(client.getName());
+        System.out.println("Spende in totale: " + receipt.getTotalCost());
     }
 
     @Override
@@ -125,7 +130,7 @@ public class Pharmacy implements Observer {
         clientsReservations.remove(index);
     }
 
-    public double getTotalGain() {
+    double getTotalGain() {
         BigDecimal bd = new BigDecimal(Double.toString(totalGain));
         bd = bd.setScale(2, BigDecimal.ROUND_FLOOR);
         return bd.doubleValue();
