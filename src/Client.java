@@ -4,27 +4,27 @@ public class Client {
     private final String fiscalCode;
     private final int isee;
 
-    public Client(String name, String surname, String fiscalCode, int isee) {
+    Client(String name, String surname, String fiscalCode, int isee) {
         this.name = name;
         this.surname = surname;
         this.fiscalCode = fiscalCode;
         this.isee = isee;
     }
 
-    public Client(Client c) {
+    Client(Client c) {
         this.name = c.getName();
         this.surname = c.getSurname();
         this.fiscalCode = c.getFiscalCode();
         this.isee = c.getIsee();
     }
 
-    public String selectDesiredMedicineName() {
+    String selectDesiredMedicineName() {
         String nameDesriedMedicine = Medicine.setMedicineName(Medicine.setRand());
         System.out.println("\n" + getName() + " vuole acquistare la medicina: " + nameDesriedMedicine);
         return nameDesriedMedicine;
     }
 
-    public boolean selectIsDesiredMedicineOriginal() {
+    boolean selectIsDesiredMedicineOriginal() {
         return Medicine.setIsOriginal();
     }
 
@@ -32,15 +32,15 @@ public class Client {
         return name;
     }
 
-    public String getSurname() {
+    String getSurname() {
         return surname;
     }
 
-    public int getIsee() {
+    int getIsee() {
         return isee;
     }
 
-    public String getFiscalCode() {
+    String getFiscalCode() {
         return fiscalCode;
     }
 }

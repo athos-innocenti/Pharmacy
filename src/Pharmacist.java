@@ -3,7 +3,7 @@ public class Pharmacist {
     private final String surname;
     private final boolean isDirector;
 
-    public Pharmacist(String name, String surname, boolean isDirector) {
+    Pharmacist(String name, String surname, boolean isDirector) {
         this.name = name;
         this.surname = surname;
         this.isDirector = isDirector;
@@ -13,11 +13,11 @@ public class Pharmacist {
         return name;
     }
 
-    public String getSurname() {
+    String getSurname() {
         return surname;
     }
 
-    public boolean isDirector() {
+    boolean isDirector() {
         return isDirector;
     }
 }

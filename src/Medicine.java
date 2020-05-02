@@ -8,7 +8,7 @@ public class Medicine {
     private final boolean isOriginal;
     private final boolean isReserved;
 
-    public Medicine() {
+    Medicine() {
         int rand = setRand();
         this.name = setMedicineName(rand);
         this.cost = setMedicineCost(rand + 1);
@@ -16,21 +16,21 @@ public class Medicine {
         this.isReserved = false;
     }
 
-    public Medicine(String name, boolean isOriginal, boolean isReserved) {
+    Medicine(String name, boolean isOriginal, boolean isReserved) {
         this.name = name;
         this.cost = setMedicineCost(name);
         this.isOriginal = isOriginal;
         this.isReserved = isReserved;
     }
 
-    public Medicine(Medicine med) {
+    Medicine(Medicine med) {
         this.name = med.getName();
         this.cost = med.getCost();
         this.isOriginal = med.isOriginal();
         this.isReserved = med.isReserved();
     }
 
-    public static int setRand() {
+    static int setRand() {
         int rand = 0;
         try {
             Scanner scanner = new Scanner(new File("src/data/medicinesList.txt"));
@@ -50,7 +50,7 @@ public class Medicine {
         return rand;
     }
 
-    public static String setMedicineName(int random) {
+    static String setMedicineName(int random) {
         String name = "";
         int indexLine = 1;
         try {
@@ -102,7 +102,7 @@ public class Medicine {
         return cost;
     }
 
-    public static boolean setIsOriginal() {
+    static boolean setIsOriginal() {
         return (Math.random() < 0.5);
     }
 
@@ -110,15 +110,15 @@ public class Medicine {
         return name;
     }
 
-    public int getCost() {
+    int getCost() {
         return cost;
     }
 
-    public boolean isOriginal() {
+    boolean isOriginal() {
         return isOriginal;
     }
 
-    public boolean isReserved() {
+    boolean isReserved() {
         return isReserved;
     }
 }

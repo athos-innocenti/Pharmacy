@@ -1,5 +1,5 @@
-public class FullWarehouseException extends Exception {
-    public FullWarehouseException() {
+class FullWarehouseException extends Exception {
+    FullWarehouseException() {
         super("Il magazzino è pieno!");
     }
 }

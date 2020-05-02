@@ -1,5 +1,5 @@
-public class NoEmployeeException extends Exception {
-    public NoEmployeeException() {
+class NoEmployeeException extends Exception {
+    NoEmployeeException() {
         super("Non possono non esserci dipedenti!");
     }
 }

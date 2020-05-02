@@ -3,7 +3,7 @@ public class Ordination {
     private final boolean isOrginal;
     private final int clientId;
 
-    public Ordination(String name, boolean isOrginal, int clientId) {
+    Ordination(String name, boolean isOrginal, int clientId) {
         this.name = name;
         this.isOrginal = isOrginal;
         this.clientId = clientId;
@@ -13,11 +13,11 @@ public class Ordination {
         return name;
     }
 
-    public boolean isOrginal() {
+    boolean isOrginal() {
         return isOrginal;
     }
 
-    public int getClientId() {
+    int getClientId() {
         return clientId;
     }
 }
