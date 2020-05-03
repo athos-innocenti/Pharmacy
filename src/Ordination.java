@@ -1,23 +1,23 @@
 public class Ordination {
-    private final String name;
+    private final String orderedMedicineName;
     private final boolean isOrginal;
-    private final int clientId;
+    private final int clientNum;
 
-    Ordination(String name, boolean isOrginal, int clientId) {
-        this.name = name;
+    Ordination(String orderedMedicineName, boolean isOrginal, int clientNum) {
+        this.orderedMedicineName = orderedMedicineName;
         this.isOrginal = isOrginal;
-        this.clientId = clientId;
+        this.clientNum = clientNum;
     }
 
-    public String getName() {
-        return name;
+    public String getOrderedMedicineName() {
+        return orderedMedicineName;
     }
 
     boolean isOrginal() {
         return isOrginal;
     }
 
-    int getClientId() {
-        return clientId;
+    int getClientNum() {
+        return clientNum;
     }
 }
