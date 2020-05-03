@@ -8,27 +8,28 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class MedicineTest {
+    // Ok
     private Medicine medicine1, medicine2, medicine3;
+    private int countLines;
 
     @BeforeEach
     void setUp() {
+        this.countLines = 0;
         medicine1 = new Medicine();
-        medicine2 = new Medicine("Paracetamolo", false);
+        medicine2 = new Medicine("Paracetamolo", false, true);
         medicine3 = new Medicine(medicine1);
     }
 
     @Test
     void setRand() throws FileNotFoundException {
-
         Scanner scannerRand = new Scanner(new File("src/data/medicinesList.txt"));
-        int countLines = 0;
         while (scannerRand.hasNextLine()) {
             countLines++;
             scannerRand.nextLine();
         }
         scannerRand.close();
-        int rand = Medicine.setRand();
 
+        int rand = Medicine.setRand();
         assertTrue( rand > 0 && rand <= countLines);
     }
 
@@ -47,20 +48,8 @@ class MedicineTest {
 
     @Test
     void getCost() throws FileNotFoundException {
-
-        boolean found = false;
-        Scanner scanner = new Scanner(new File("src/data/medicinesList.txt"));
-        while (scanner.hasNextLine()) {
-            scanner.nextLine();
-            if (Integer.parseInt(scanner.nextLine()) == medicine1.getCost()) {
-                found = true;
-                break;
-            }
-            scanner.nextLine();
-        }
-        scanner.close();
-
-        assertTrue(found);
+        assertTrue(findCost(medicine1.getCost()));
+        assertTrue(findCost(medicine2.getCost()));
         assertEquals(medicine2.getCost(), 5);
         assertEquals(medicine3.getCost(), medicine1.getCost());
     }
@@ -69,6 +58,13 @@ class MedicineTest {
     void isOriginal() {
         assertFalse(medicine2.isOriginal());
         assertEquals(medicine3.isOriginal(), medicine1.isOriginal());
+    }
+
+    @Test
+    void isReserved() {
+        assertFalse(medicine1.isReserved());
+        assertTrue(medicine2.isReserved());
+        assertFalse(medicine3.isReserved());
     }
 
     @Test
@@ -87,6 +83,20 @@ class MedicineTest {
             scannerName.nextLine();
         }
         scannerName.close();
+        return found;
+    }
+
+    private boolean findCost(int medicineCost) throws  FileNotFoundException {
+        boolean found = false;
+        Scanner scanner = new Scanner(new File("src/data/medicinesList.txt"));
+        while (scanner.hasNextLine()) {
+            scanner.nextLine();
+            if (Integer.parseInt(scanner.nextLine()) == medicineCost) {
+                found = true;
+                break;
+            }
+        }
+        scanner.close();
         return found;
     }
 }

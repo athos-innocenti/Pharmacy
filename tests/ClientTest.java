@@ -8,6 +8,7 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
+    // Ok
     private Client client1, client2;
 
     @BeforeEach
@@ -19,6 +20,7 @@ class ClientTest {
     @Test
     void selectDesiredMedicineName() throws FileNotFoundException {
         String medicineName = client1.selectDesiredMedicineName();
+
         boolean nameFound = false;
         Scanner scannerName = new Scanner(new File("src/data/medicinesList.txt"));
         while (scannerName.hasNextLine()) {

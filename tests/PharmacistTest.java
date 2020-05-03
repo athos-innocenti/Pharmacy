@@ -4,11 +4,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PharmacistTest {
+    // Ok
     private Pharmacist pharmacist;
 
     @BeforeEach
     void setUp() {
-        pharmacist = new Pharmacist("Paolo", "Rossi", true);
+        pharmacist = new Pharmacist("Paolo", "Rossi", false);
     }
 
     @Test
@@ -23,6 +24,6 @@ class PharmacistTest {
 
     @Test
     void isDirector() {
-        assertTrue(pharmacist.isDirector());
+        assertFalse(pharmacist.isDirector());
     }
 }
