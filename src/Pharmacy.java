@@ -79,12 +79,14 @@ public class Pharmacy implements Observer {
 
     void sellMedicine(Client client) throws FullWarehouseException {
         totalClients++;
+        int countReservations = 0;
         String desiredMedicineName;
-        boolean isDesiredMedicineOriginal, wantsToBuy;
+        boolean isDesiredMedicineOriginal, wantsToBuy, bought = false;
         do {
             desiredMedicineName = client.selectDesiredMedicineName();
             isDesiredMedicineOriginal = client.selectIsDesiredMedicineOriginal();
             if (warehouse.isAvailable(desiredMedicineName, isDesiredMedicineOriginal)) {
+                bought = true;
                 System.out.println("La medicina richiesta è disponibile nel magazzino");
                 System.out.println("Si desidera acquistare a prezzo pieno o ridotto? (pieno o ridotto)");
                 String paymentMethod = scanner.nextLine();
@@ -99,6 +101,7 @@ public class Pharmacy implements Observer {
                 System.out.println(client.getName() + " ha speso finora: " + payment.getProfit() + "\n");
                 System.out.println("Il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
             } else {
+                countReservations++;
                 System.out.println("La medicina richiesta non è momentaneamente disponibile");
                 clientsReservations.add(new Reservation(new Client(client), desiredMedicineName, isDesiredMedicineOriginal));
                 System.out.println("È stata creata una prenotazione a nome: " + client.getName() + " per la medicina: " + desiredMedicineName + "\n");
@@ -118,8 +121,13 @@ public class Pharmacy implements Observer {
         }
         while (wantsToBuy);
         //previousClient = client.getFiscalCode();
-        receipt.getPurchasedMedicines(client.getName());
-        System.out.println("Spende in totale: " + receipt.getTotalCost());
+        if (bought) {
+            receipt.printPurchasedMedicines(client.getName());
+            System.out.println("Spende in totale: " + receipt.getTotalCost());
+        }
+        if (countReservations > 0) {
+            System.out.println(client.getName() + " ha " + countReservations + " medicine prenotate");
+        }
     }
 
     @Override

@@ -30,37 +30,16 @@ class Warehouse extends Observable {
         return isAvailable;
     }
 
-    void addRequiredMedicine(String medicineName, boolean isOriginal, int clientId) {
+    void addRequiredMedicine(String medicineName, boolean isOriginal, int clientNum) {
         System.out.println("La medicina: " + medicineName + " è stata richiesta alla casa farmaceutica");
-        requiredMedicines.add(new Ordination(medicineName, isOriginal, clientId));
+        requiredMedicines.add(new Ordination(medicineName, isOriginal, clientNum));
     }
-    /*
-    public void createRequiredMedicine(int noRequiredMedicines, int currentClientId) throws FullWarehouseException {
-        boolean created = false;
-        if (medicinesStored < MAX_CAPACITY) {
-            while(!created) {
-                int randMed = (int)(Math.random() * noRequiredMedicines);
-                if(requiredMedicines.get(randMed).getClientId() != currentClientId) {
-                    medicines.add(new Medicine(requiredMedicines.get(randMed).getName(), requiredMedicines.get(randMed).isOrginal(), true));
-                    System.out.println("\nUNA MEDICINA PRENOTATA È ORA DISPONIBILE!");
-                    medicineRecived = randMed;
-                    requiredMedicines.remove(randMed);
-                    medicinesStored++;
-                    created = true;
-                    }
-                }
-            } else {
-            throw new FullWarehouseException();
-        }
-        setChanged();
-        notifyObservers();
-    }*/
 
     void createRequiredMedicine(int noRequiredMedicines, int currentClientId) throws FullWarehouseException {
         if (medicinesStored < MAX_CAPACITY) {
             int randMed = (int) (Math.random() * noRequiredMedicines);
-            if (requiredMedicines.get(randMed).getClientId() != currentClientId) {
-                medicines.add(new Medicine(requiredMedicines.get(randMed).getName(), requiredMedicines.get(randMed).isOrginal(), true));
+            if (requiredMedicines.get(randMed).getClientNum() != currentClientId) {
+                medicines.add(new Medicine(requiredMedicines.get(randMed).getOrderedMedicineName(), requiredMedicines.get(randMed).isOrginal(), true));
                 System.out.println("\nUNA MEDICINA PRENOTATA È ORA DISPONIBILE!");
                 medicineRecived = randMed;
                 requiredMedicines.remove(randMed);
