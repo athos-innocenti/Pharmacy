@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class MedicineTest {
-    // Ok
     private Medicine medicine1, medicine2, medicine3;
     private int countLines;
 

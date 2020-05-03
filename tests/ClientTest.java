@@ -8,7 +8,6 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
-    // Ok
     private Client client1, client2;
 
     @BeforeEach

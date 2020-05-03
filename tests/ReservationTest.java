@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReservationTest {
-    // Ok
     private Reservation reservation;
     private Client client;
 
