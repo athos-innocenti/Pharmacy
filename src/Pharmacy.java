@@ -132,7 +132,7 @@ public class Pharmacy implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        int index = warehouse.getMedicineRecived();
+        int index = warehouse.getCreatedMedicineIndex();
         String clientName = clientsReservations.get(index).getClientIdentifier().getName();
         String medicineName = clientsReservations.get(index).getDesiredMedicineName();
         System.out.println("È STATO AVVISATO IL CLIENTE " + clientName + " CHE È STATA RISERVATA LA MEDICINA " + medicineName + "!\n");

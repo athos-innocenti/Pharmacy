@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 class Warehouse extends Observable {
-    private int medicinesStored, medicineRecived;
+    private int medicinesStored, createdMedicineIndex;
     private static final int MAX_CAPACITY = 100;
     private ArrayList<Medicine> medicines = new ArrayList<>();
     private Medicine soldMedicine;
@@ -41,7 +41,7 @@ class Warehouse extends Observable {
             if (requiredMedicines.get(randMed).getClientNum() != currentClientId) {
                 medicines.add(new Medicine(requiredMedicines.get(randMed).getOrderedMedicineName(), requiredMedicines.get(randMed).isOrginal(), true));
                 System.out.println("\nUNA MEDICINA PRENOTATA È ORA DISPONIBILE!");
-                medicineRecived = randMed;
+                createdMedicineIndex = randMed;
                 requiredMedicines.remove(randMed);
                 medicinesStored++;
             }
@@ -52,19 +52,27 @@ class Warehouse extends Observable {
         notifyObservers();
     }
 
-    int getMedicineRecived() {
-        return medicineRecived;
+    static int getMaxCapacity() {
+        return MAX_CAPACITY;
+    }
+
+    int getCreatedMedicineIndex() {
+        return createdMedicineIndex;
+    }
+
+    int getMedicinesStored() {
+        return medicinesStored;
     }
 
     Medicine getSoldMedicine() {
         return soldMedicine;
     }
 
-    static int getMaxCapacity() {
-        return MAX_CAPACITY;
+    ArrayList<Medicine> getMedicines() {
+        return medicines;
     }
 
-    int getMedicinesStored() {
-        return medicinesStored;
+    ArrayList<Ordination> getRequiredMedicines() {
+        return requiredMedicines;
     }
 }
