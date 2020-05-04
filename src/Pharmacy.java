@@ -7,6 +7,7 @@ public class Pharmacy implements Observer {
     private static Pharmacist director;
     private static double totalGain;
     private static int totalClients;
+    private static int numberOfEmployees;
 
     private Warehouse warehouse;
     private ArrayList<Reservation> clientsReservations;
@@ -32,37 +33,10 @@ public class Pharmacy implements Observer {
         warehouse.addObserver(this);
     }
 
-    static Pharmacy getIstance() throws NoEmployeeException {
+    static Pharmacy getIstance(int numberOfEmployees, String pharmacyName, Pharmacist[] pharmacists) {
         if (istance == null) {
-            System.out.println("Nome della farmacia: ");
-            String pharmacyName = scanner.nextLine();
-
-            System.out.println("Quanti sono i dipendenti della farmacia? ");
-            int numberOfEmployees = scanner.nextInt();
-            if (numberOfEmployees == 0) {
-                throw new NoEmployeeException();
-            }
-            scanner.nextLine();
-
-            Pharmacist[] pharmacists = new Pharmacist[numberOfEmployees];
-
-            String pharmacistsName;
-            String pharmacistsSurname;
-            System.out.println("Nome del direttore: ");
-            pharmacistsName = scanner.nextLine();
-            System.out.println("Cognome del direttore: ");
-            pharmacistsSurname = scanner.nextLine();
-            pharmacists[0] = new Pharmacist(pharmacistsName, pharmacistsSurname, true);
-
-            for (int i = 1; i < pharmacists.length; i++) {
-                System.out.println("Nome del " + i + "^o dipendente: ");
-                pharmacistsName = scanner.nextLine();
-                System.out.println("Cognome del " + i + "^o dipendente: ");
-                pharmacistsSurname = scanner.nextLine();
-                pharmacists[i] = new Pharmacist(pharmacistsName, pharmacistsSurname, false);
-            }
-
             istance = new Pharmacy(pharmacyName, pharmacists[0], pharmacists);
+            Pharmacy.setNumberOfEmployees(numberOfEmployees);
         }
         return istance;
     }
@@ -120,7 +94,6 @@ public class Pharmacy implements Observer {
             previousClient = client.getFiscalCode();
         }
         while (wantsToBuy);
-        //previousClient = client.getFiscalCode();
         if (bought) {
             receipt.printPurchasedMedicines(client.getName());
             System.out.println("Spende in totale: " + receipt.getTotalCost());
@@ -143,5 +116,33 @@ public class Pharmacy implements Observer {
         BigDecimal bd = new BigDecimal(Double.toString(totalGain));
         bd = bd.setScale(2, BigDecimal.ROUND_FLOOR);
         return bd.doubleValue();
+    }
+
+    int getNumberOfEmployees() {
+        return numberOfEmployees;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    Pharmacist[] getPharmacists() {
+        return pharmacists;
+    }
+
+    Pharmacist getDirector() {
+        return director;
+    }
+
+    int getTotalClients() {
+        return totalClients;
+    }
+
+    Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    static void setNumberOfEmployees(int numberOfEmployees) {
+        Pharmacy.numberOfEmployees = numberOfEmployees;
     }
 }
