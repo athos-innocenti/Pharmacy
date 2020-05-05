@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PharmacyTest {
     private Pharmacy pharmacy;
     private Pharmacist[] pharmacists;
+    private Client client;
 
     @BeforeEach
     void setUp() {
@@ -14,6 +15,7 @@ class PharmacyTest {
         pharmacists[1] = new Pharmacist("Francesco", "Innocenti", false);
         pharmacists[2] = new Pharmacist("Giulia", "Esposito", false);
         pharmacy = Pharmacy.getIstance(3, "Fornacelle", pharmacists);
+        client = new Client("Giulio", "Rossi", "a", 50000);
     }
 
     @Test
@@ -23,13 +25,26 @@ class PharmacyTest {
     }
 
     @Test
-    void sellMedicine() {
-        // TO DO
+    void addReservation() {
+        int size = pharmacy.getClientsReservations().size();
+        pharmacy.addReservation(client, "Paracetamolo", false);
+        assertEquals(pharmacy.getClientsReservations().size(), size + 1);
+        assertEquals(pharmacy.getClientsReservations().get(size).getClientIdentifier().getName(), "Giulio");
+        assertEquals(pharmacy.getClientsReservations().get(size).getClientIdentifier().getSurname(), "Rossi");
+        assertEquals(pharmacy.getClientsReservations().get(size).getClientIdentifier().getFiscalCode(), "a");
+        assertEquals(pharmacy.getClientsReservations().get(size).getClientIdentifier().getIsee(), 50000);
+        assertEquals(pharmacy.getClientsReservations().get(size).getDesiredMedicineName(), "Paracetamolo");
+        assertFalse(pharmacy.getClientsReservations().get(size).isDesiredMedicineOriginal());
     }
 
     @Test
-    void update() {
-        // TO DO
+    void handleRequiredMedicines() throws FullWarehouseException{
+        int size = pharmacy.getWarehouse().getMedicinesStored();
+        if (pharmacy.handleRequiredMedicines(client)) {
+            assertEquals(pharmacy.getWarehouse().getMedicinesStored(), size);
+        } else {
+            assertEquals(pharmacy.getWarehouse().getMedicinesStored(), size);
+        }
     }
 
     @Test
@@ -69,7 +84,7 @@ class PharmacyTest {
     }
 
     @Test
-    void getTotalClients() throws FullWarehouseException {
+    void getTotalClients() {
         assertEquals(pharmacy.getTotalClients(), 0);
     }
 
