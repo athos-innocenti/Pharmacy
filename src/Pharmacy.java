@@ -53,9 +53,10 @@ public class Pharmacy implements Observer {
 
     void sellMedicine(Client client) throws FullWarehouseException {
         totalClients++;
-        int countReservations = 0;
         String desiredMedicineName;
-        boolean isDesiredMedicineOriginal, wantsToBuy, bought = false;
+        int countReservations = 0;
+        boolean bought = false;
+        boolean isDesiredMedicineOriginal, wantsToBuy;
         do {
             desiredMedicineName = client.selectDesiredMedicineName();
             isDesiredMedicineOriginal = client.selectIsDesiredMedicineOriginal();
@@ -76,19 +77,9 @@ public class Pharmacy implements Observer {
                 System.out.println("Il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
             } else {
                 countReservations++;
-                System.out.println("La medicina richiesta non è momentaneamente disponibile");
-                clientsReservations.add(new Reservation(new Client(client), desiredMedicineName, isDesiredMedicineOriginal));
-                System.out.println("È stata creata una prenotazione a nome: " + client.getName() + " per la medicina: " + desiredMedicineName + "\n");
-                warehouse.addRequiredMedicine(desiredMedicineName, isDesiredMedicineOriginal, totalClients);
+                addReservation(client, desiredMedicineName, isDesiredMedicineOriginal);
             }
-            if (totalClients > 1 && clientsReservations.size() > 0 && Math.random() < 0.5) {
-                for (Reservation r : clientsReservations) {
-                    if (!r.getClientIdentifier().getFiscalCode().equals(client.getFiscalCode())) {
-                        warehouse.createRequiredMedicine(clientsReservations.size() - 1, totalClients - 1);
-                        break;
-                    }
-                }
-            }
+            handleRequiredMedicines(client);
             System.out.println("\nSi vuole acquistare un'altra medicina? (si o no)");
             wantsToBuy = scanner.nextLine().equals("si");
             previousClient = client.getFiscalCode();
@@ -101,6 +92,26 @@ public class Pharmacy implements Observer {
         if (countReservations > 0) {
             System.out.println(client.getName() + " ha " + countReservations + " medicine prenotate");
         }
+    }
+
+    void addReservation(Client client, String desiredMedicineName, boolean isDesiredMedicineOriginal) {
+        System.out.println("La medicina richiesta non è momentaneamente disponibile");
+        clientsReservations.add(new Reservation(new Client(client), desiredMedicineName, isDesiredMedicineOriginal));
+        System.out.println("È stata creata una prenotazione a nome: " + client.getName() + " per la medicina: " + desiredMedicineName + "\n");
+        warehouse.addRequiredMedicine(desiredMedicineName, isDesiredMedicineOriginal, totalClients);
+    }
+
+    boolean handleRequiredMedicines(Client client) throws FullWarehouseException {
+        boolean random = Math.random() < 0.5;
+        if (totalClients > 1 && clientsReservations.size() > 0 && random) {
+            for (Reservation r : clientsReservations) {
+                if (!r.getClientIdentifier().getFiscalCode().equals(client.getFiscalCode())) {
+                    warehouse.createRequiredMedicine(clientsReservations.size() - 1, totalClients - 1);
+                    break;
+                }
+            }
+        }
+        return random;
     }
 
     @Override
@@ -140,6 +151,10 @@ public class Pharmacy implements Observer {
 
     Warehouse getWarehouse() {
         return warehouse;
+    }
+
+    ArrayList<Reservation> getClientsReservations() {
+        return clientsReservations;
     }
 
     static void setNumberOfEmployees(int numberOfEmployees) {
