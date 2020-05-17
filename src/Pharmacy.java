@@ -9,23 +9,23 @@ public class Pharmacy implements Observer {
     private static int totalClients;
     private static int numberOfEmployees;
 
-    private Warehouse warehouse;
-    private ArrayList<Reservation> clientsReservations;
-
-    private String previousClient;
-    private PaymentHandler payment;
-    private Receipt receipt;
+    private static Warehouse warehouse;
+    private static ArrayList<Reservation> clientsReservations;
 
     private static Scanner scanner = new Scanner(System.in);
     private static Pharmacy istance = null;
+
+    private static String previousClient;
+    private PaymentHandler payment;
+    private Receipt receipt;
 
     private Pharmacy(String name, Pharmacist director, Pharmacist[] pharmacists) {
         Pharmacy.name = name;
         Pharmacy.director = director;
         Pharmacy.pharmacists = pharmacists;
-        Pharmacy.totalGain = 0;
-        Pharmacy.totalClients = 0;
 
+        totalGain = 0;
+        totalClients = 0;
         clientsReservations = new ArrayList<>();
         previousClient = "";
 
@@ -55,17 +55,19 @@ public class Pharmacy implements Observer {
         totalClients++;
         String desiredMedicineName;
         int countReservations = 0;
+        int previousReservations = 0;
         boolean bought = false;
-        boolean isDesiredMedicineOriginal, wantsToBuy;
+        boolean isDesiredMedicineOriginal, wantsToBuy, hasBought;
         do {
             desiredMedicineName = client.selectDesiredMedicineName();
             isDesiredMedicineOriginal = client.selectIsDesiredMedicineOriginal();
+            hasBought = bought;
             if (warehouse.isAvailable(desiredMedicineName, isDesiredMedicineOriginal)) {
                 bought = true;
                 System.out.println("La medicina richiesta è disponibile nel magazzino");
                 System.out.println("Si desidera acquistare a prezzo pieno o ridotto? (pieno o ridotto)");
                 String paymentMethod = scanner.nextLine();
-                if (!client.getFiscalCode().equals(previousClient)) {
+                if (!client.getFiscalCode().equals(previousClient) || (previousReservations < countReservations && !hasBought)) {
                     payment = new ProxyPaymentHandler();
                     receipt = new Receipt();
                 }
@@ -76,6 +78,7 @@ public class Pharmacy implements Observer {
                 System.out.println(client.getName() + " ha speso finora: " + payment.getProfit() + "\n");
                 System.out.println("Il magazzino contiene ora " + warehouse.getMedicinesStored() + " medicine");
             } else {
+                previousReservations = countReservations;
                 countReservations++;
                 addReservation(client, desiredMedicineName, isDesiredMedicineOriginal);
             }
