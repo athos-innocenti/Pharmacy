@@ -38,16 +38,6 @@ class PharmacyTest {
     }
 
     @Test
-    void handleRequiredMedicines() throws FullWarehouseException{
-        int size = pharmacy.getWarehouse().getMedicinesStored();
-        if (pharmacy.handleRequiredMedicines(client)) {
-            assertEquals(pharmacy.getWarehouse().getMedicinesStored(), size);
-        } else {
-            assertEquals(pharmacy.getWarehouse().getMedicinesStored(), size);
-        }
-    }
-
-    @Test
     void getTotalGain() {
         assertEquals(pharmacy.getTotalGain(), 0);
     }
@@ -92,5 +82,15 @@ class PharmacyTest {
     void getWarehouse() {
         assertTrue(pharmacy.getWarehouse().getMedicinesStored() > 0);
         assertTrue(pharmacy.getWarehouse().getMedicinesStored() <= Warehouse.getMaxCapacity());
+    }
+
+    @Test
+    void handleRequiredMedicines() throws FullWarehouseException{
+        int size = pharmacy.getWarehouse().getMedicinesStored();
+        if (pharmacy.handleRequiredMedicines(client)) {
+            assertEquals(pharmacy.getWarehouse().getMedicinesStored(), size);
+        } else {
+            assertEquals(pharmacy.getWarehouse().getMedicinesStored(), size);
+        }
     }
 }
